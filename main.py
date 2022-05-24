@@ -8,11 +8,11 @@ outline_download_link = 'https://getoutline.org/ru/get-started/'
 
 bot_api_token = os.getenv("BOT_API_TOKEN")
 
-bot = telebot.TeleBot(bot_api_token)
+bot = telebot.TeleBot(bot_api_token, parse_mode='HTML')
 
 @bot.message_handler(commands = ['start'])
 def send_welcome(message):
-    bot.send_message(message.chat.id, """Привет! Этот бот умеет выдавать ключи к прокси-серверу для сотрудников ITGenio.""")
+    bot.send_message(message.chat.id, """Привет! Этот бот выдает ключи к прокси-серверу для сотрудников ITGenio.""")
 
 
 @bot.message_handler(commands = ['status'])
@@ -26,7 +26,7 @@ def make_new_key(message):
     key_name = message.text[7:]
     key = py_outline_api.create_new_key(key_name)
 
-    answer = "Ваш ключ:\n" + key.access_url + "\n" + "Скачать Outline Client вы можете по ссылке: " + outline_download_link
+    answer = "Ваш ключ:\n\n" + "<code>" + key.access_url + "</code>" + "\n\n" + "Скачать Outline Client вы можете по ссылке: " + outline_download_link
     if key.error_message:
         answer = key.error_message
         monitor.report_error(key.error_message, message.from_user.username, message.from_user.first_name,message.from_user.last_name)
