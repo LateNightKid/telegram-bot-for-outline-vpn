@@ -26,7 +26,7 @@ def make_new_key(message):
     key_name = message.text[7:]
     key = py_outline_api.create_new_key(key_name)
 
-    answer = "Ваш ключ:\n\n" + "<code>" + key.access_url + "</code>" + "\n\n" + "Скачать Outline Client вы можете по ссылке: " + outline_download_link
+    answer = "Ваш ключ:\n\n" + "<code>" + key.access_url + "</code>" + "\n\n" + "Нажмите на него, чтобы скопировать\n" + "Скачать Outline Client вы можете по ссылке: " + outline_download_link
     if key.error_message:
         answer = key.error_message
         monitor.report_error(key.error_message, message.from_user.username, message.from_user.first_name,message.from_user.last_name)
