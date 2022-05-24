@@ -1,6 +1,7 @@
 import os
 import telebot
 import py_outline_api
+import monitor
 from telebot import custom_filters
 
 outline_download_link = 'https://getoutline.org/ru/get-started/'
@@ -28,7 +29,10 @@ def make_new_key(message):
     answer = "Ваш ключ:\n" + key.access_url + "\n" + "Скачать Outline Client вы можете по ссылке: " + outline_download_link
     if key.error_message:
         answer = key.error_message
+        monitor.report_error(key.error_message, message.from_user.username, message.from_user.first_name,message.from_user.last_name)
+
     bot.send_message(message.chat.id, answer)
+    monitor.new_key_created(key.id, key.name, message.chat.id, message.from_user.username, message.from_user.first_name, message.from_user.last_name)
 
 bot.add_custom_filter(custom_filters.TextStartsFilter())
 bot.infinity_polling()
