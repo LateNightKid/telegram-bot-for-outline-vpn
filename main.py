@@ -22,10 +22,12 @@ def check_status(message):
 
 @bot.message_handler(text_startswith = 'newkey')
 def make_new_key(message):
-    user_name = message.text[7:]
-    key = py_outline_api.create_new_key(user_name)
+    key_name = message.text[7:]
+    key = py_outline_api.create_new_key(key_name)
 
-    answer = "Ваш ключ:\n" + key + "\n" + "Скачать Outline Client вы можете по ссылке: " + outline_download_link
+    answer = "Ваш ключ:\n" + key.access_url + "\n" + "Скачать Outline Client вы можете по ссылке: " + outline_download_link
+    if key.error_message:
+        answer = key.error_message
     bot.send_message(message.chat.id, answer)
 
 bot.add_custom_filter(custom_filters.TextStartsFilter())
