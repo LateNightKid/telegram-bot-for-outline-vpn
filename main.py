@@ -14,9 +14,10 @@ def send_welcome(message):
     bot.send_message(message.chat.id, """Привет! Этот бот умеет выдавать ключи к прокси-серверу для сотрудников ITGenio.""")
 
 
-@bot.message_handler(commands = ['help'])
-def send_help(message):
-    bot.send_message(message.chat.id, """""")
+@bot.message_handler(commands = ['status'])
+def check_status(message):
+    api_status = py_outline_api.check_api_status()
+    bot.send_message(message.chat.id, "Bot is online. API status code is {}".format(api_status))
 
 
 @bot.message_handler(text_startswith = 'newkey')
