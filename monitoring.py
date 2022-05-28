@@ -2,6 +2,7 @@ import telebot
 import time
 from outline_api_service import check_api_status
 from config import MONITOR_API_TOKEN, ADMIN_CHAT_ID
+from config import STATUS_CHECK_FREQUENCY
 
 
 monitor = telebot.TeleBot(MONITOR_API_TOKEN)
@@ -35,4 +36,4 @@ def send_api_status():
         api_status_code = check_api_status() 
 
         monitor.send_message(ADMIN_CHAT_ID, f"API status code: {api_status_code}")
-        time.sleep(60*60*30)    # one status message per 30 mins
+        time.sleep(STATUS_CHECK_FREQUENCY)    
