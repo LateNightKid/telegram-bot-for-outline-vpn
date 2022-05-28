@@ -37,7 +37,8 @@ def _create_new_key() -> dict:
     request_url = OUTLINE_API_URL + '/access-keys'
     r = requests.post(request_url, verify=False)    
 
-    if int(r.status_code) > 299:
+    print("create status code" + str(r.status_code))
+    if int(r.status_code) != 201:
         raise KeyCreationError
     
     return _parse_response(r)
@@ -50,6 +51,6 @@ def _parse_response(response: requests.models.Response) -> dict:
 def _rename_key(key_id: KeyId, key_name: str) -> None:
     rename_url = OUTLINE_API_URL + '/access-keys/' + key_id + '/name'
     r = requests.put(rename_url, data = {'name': key_name}, verify=False)  
-
-    if int(r.status_code) > 299:
+    print('rename status code: ' + str(r.status_code))
+    if int(r.status_code) != 204: 
         raise KeyRenamingError

@@ -24,9 +24,9 @@ def send_error(error_message: str, username: str, firstname: str,
 
     answer = ("Error detected!" + 
             "\nerror_message: " + error_message + 
-            "\nuser_name"       + username + 
-            "\nfirst_name"      + firstname + 
-            "\nlast_name"       + lastname)
+            "\nuser_name: "     + username + 
+            "\nfirst_name: "    + firstname + 
+            "\nlast_name: "     + lastname)
 
     monitor.send_message(ADMIN_CHAT_ID, answer)
 
@@ -34,5 +34,5 @@ def send_api_status():
     while True:
         api_status_code = check_api_status() 
 
-        monitor.send_message(ADMIN_CHAT_ID, api_status_code)
+        monitor.send_message(ADMIN_CHAT_ID, f"API status code: {api_status_code}")
         time.sleep(60*60*30)    # one status message per 30 mins

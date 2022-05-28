@@ -1,6 +1,6 @@
 import telebot
 import monitoring
-#from treading import Thread
+from threading import Thread
 from outline_api_service import get_new_key
 from telebot import custom_filters
 from config import BOT_API_TOKEN
@@ -8,7 +8,13 @@ from exceptions import KeyCreationError, KeyRenamingError
 from message_formatter import make_message_for_new_key
 
 
-bot = telebot.TeleBot(BOT_API_TOKEN)
+bot = telebot.TeleBot(BOT_API_TOKEN, parse_mode='HTML')
+
+@bot.message_handler(commands = ['status'])
+def send_status(message):
+    monitoring.send_api_status()
+
+
 
 @bot.message_handler(commands = ['start'])
 def send_welcome(message):
@@ -44,7 +50,7 @@ def make_new_key(message):
         monitoring.send_error(error_message, message.from_user.username, 
                 message.from_user.first_name, message.from_user.last_name)
 
-#status_checking_tread = Thread(target=monitoring.send_api_status)
-#status_checking_tread.start()
+status_checking_tread = Thread(target=monitoring.send_api_status)
+status_checking_tread.start()
 bot.add_custom_filter(custom_filters.TextStartsFilter())
 bot.infinity_polling()
