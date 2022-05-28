@@ -3,6 +3,7 @@ import json
 from typing import NamedTuple
 from config import OUTLINE_API_URL
 from exceptions import KeyCreationError, KeyRenamingError
+from urllib3.exceptions import InsecureRequestWarning
 
 
 AccessUrl = str
@@ -28,6 +29,7 @@ def get_new_key(key_name: str) -> Key:
 
     
 def check_api_status() -> StatusCode:
+    _disable_ssl_warnings()
     url = OUTLINE_API_URL + '/access-keys'
     r = requests.get(url, verify=False)
     return str(r.status_code)
@@ -37,7 +39,6 @@ def _create_new_key() -> dict:
     request_url = OUTLINE_API_URL + '/access-keys'
     r = requests.post(request_url, verify=False)    
 
-    print("create status code" + str(r.status_code))
     if int(r.status_code) != 201:
         raise KeyCreationError
     
@@ -51,6 +52,9 @@ def _parse_response(response: requests.models.Response) -> dict:
 def _rename_key(key_id: KeyId, key_name: str) -> None:
     rename_url = OUTLINE_API_URL + '/access-keys/' + key_id + '/name'
     r = requests.put(rename_url, data = {'name': key_name}, verify=False)  
-    print('rename status code: ' + str(r.status_code))
     if int(r.status_code) != 204: 
         raise KeyRenamingError
+
+
+def _disable_ssl_warnings():
+    requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
