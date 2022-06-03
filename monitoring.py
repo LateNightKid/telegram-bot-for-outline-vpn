@@ -1,11 +1,10 @@
 import telebot
-import time
 from outline_api_service import check_api_status
 from config import MONITOR_API_TOKEN, ADMIN_CHAT_ID
-from config import STATUS_CHECK_FREQUENCY
 
 
 monitor = telebot.TeleBot(MONITOR_API_TOKEN)
+
 
 def new_key_created(key_id: int, key_name: str, chat_id: int, username: str,
         firstname: str, lastname: str) -> None:
@@ -31,9 +30,16 @@ def send_error(error_message: str, username: str, firstname: str,
 
     monitor.send_message(ADMIN_CHAT_ID, answer)
 
-def send_api_status():
-    while True:
-        api_status_code = check_api_status() 
 
-        monitor.send_message(ADMIN_CHAT_ID, f"API status code: {api_status_code}")
-        time.sleep(STATUS_CHECK_FREQUENCY)    
+def send_api_status() -> None:
+    api_status_codes = check_api_status() 
+    message_to_send = ''
+    for server_id, status_code in api_status_codes:
+        message_to_send += f"server id:{server_id}, api_status_code: {status_code}\n"
+
+    monitor.send_message(ADMIN_CHAT_ID, message_to_send)
+
+
+def send_start_message():
+    monitor.send_message(ADMIN_CHAT_ID, "-----bot-started!-----")
+    send_api_status()

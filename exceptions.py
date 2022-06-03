@@ -7,3 +7,5 @@ class KeyCreationError(ApiServiceError):
 class KeyRenamingError(ApiServiceError):
     """API error: cannot rename created key"""
 
+class InvalidServerIdError(Exception):
+    """Server ID does not exist"""

@@ -2,7 +2,7 @@ import os
 
 
 #Outline api settings
-OUTLINE_API_URL = os.getenv('OUTLINE_API_URL')
+OUTLINE_API_URL_0 = os.getenv('OUTLINE_API_URL')
 
 #Main bot settings
 BOT_API_TOKEN = os.getenv("BOT_API_TOKEN")
