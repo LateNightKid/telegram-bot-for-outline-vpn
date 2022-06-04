@@ -1,15 +1,12 @@
 import requests
 import json
 from typing import NamedTuple
-from config import OUTLINE_API_URL_0
 from exceptions import KeyCreationError, KeyRenamingError, InvalidServerIdError
 from urllib3.exceptions import InsecureRequestWarning
 from aliases import AccessUrl, KeyId, ServerId
+from servers_description import servers
+import pdb
 
-
-servers ={                          # {'server_id':'api_url'}
-        '0': OUTLINE_API_URL_0
-        }
 
 
 class Key(NamedTuple):
@@ -18,7 +15,7 @@ class Key(NamedTuple):
     access_url: AccessUrl
 
 
-def get_new_key(key_name: str, server_id: ServerId) -> Key:
+def get_new_key(key_name: str | None, server_id: ServerId) -> Key:
 
     if servers.get(server_id) == None:
         raise InvalidServerIdError
@@ -26,7 +23,10 @@ def get_new_key(key_name: str, server_id: ServerId) -> Key:
     api_response = _create_new_key(server_id) 
 
     key_id = api_response.get('id')
+
     access_url = api_response.get('accessUrl')
+    if key_name == None:
+        key_name = "key_id:" + key_id
 
     _rename_key(key_id, key_name, server_id)
     key = Key(kid=key_id, name=key_name, access_url=access_url)
@@ -35,9 +35,10 @@ def get_new_key(key_name: str, server_id: ServerId) -> Key:
 
     
 def check_api_status() -> dict:
+    global servers
     _disable_ssl_warnings()
     api_status_codes = {}
-    for server_id, api_token in servers:
+    for server_id, api_token in servers.items():
         url = api_token + '/access-keys'
         r = requests.get(url, verify=False)
         api_status_codes.update({server_id: str(r.status_code)})
@@ -58,7 +59,7 @@ def _parse_response(response: requests.models.Response) -> dict:
     return json.loads(response.text)
 
 
-def _rename_key(key_id: KeyId, key_name: str, server_id: ServerId) -> None:
+def _rename_key(key_id: KeyId, key_name: str | None, server_id: ServerId) -> None:
     rename_url = servers.get(server_id) + '/access-keys/' + key_id + '/name'
     r = requests.put(rename_url, data = {'name': key_name}, verify=False)  
     if int(r.status_code) != 204: 
@@ -67,3 +68,7 @@ def _rename_key(key_id: KeyId, key_name: str, server_id: ServerId) -> None:
 
 def _disable_ssl_warnings():
     requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
+
+
+if __name__ == "__main__":
+    check_api_status()
