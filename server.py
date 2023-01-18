@@ -2,7 +2,7 @@ import telebot
 from telebot import types
 import monitoring
 from outline_api_service import get_new_key
-from config import BOT_API_TOKEN
+from config import BOT_API_TOKEN, DEFAULT_SERVER_ID
 from exceptions import KeyCreationError, KeyRenamingError, InvalidServerIdError
 import message_formatter as f
 from message_formatter import make_message_for_new_key
@@ -38,13 +38,13 @@ def send_servers_list(message):
 @bot.message_handler(content_types = ['text'])
 def anwser(message):
     if message.text == "Новый ключ":
-        server_id = "0"
+        server_id = DEFAULT_SERVER_ID
         key_name = _form_key_name(message)
         _make_new_key(message, server_id, key_name)
     elif message.text == "Помощь":
         bot.send_message(message.chat.id, f.make_help_message())
 
-    elif message.text[:7] == "newkey ":
+    elif message.text[:7] == "/newkey":
         server_id, key_name = _parse_the_command(message)
         _make_new_key(message, server_id, key_name)
 
@@ -73,6 +73,7 @@ def _make_new_key(message, server_id: ServerId, key_name: str):
         message_to_send = "Сервер с таким ID отсутствует в списке серверов.\n"\
         "Введите /servers, чтобы узнать доступные ID"
         bot.send_message(message.chat.id, message_to_send)
+
 
 def _send_key(message, key):
 
@@ -105,9 +106,15 @@ def _make_main_menu_markup() -> types.ReplyKeyboardMarkup:
             )
     return menu_markup
 
+
 def _parse_the_command(message) -> list:
-    arguments = message.text[7:].split()
-    server_id = arguments[0]
+    arguments = message.text[8:].split()
+
+    if arguments != []:
+        server_id = arguments[0]
+    else:
+        server_id = DEFAULT_SERVER_ID
+
     key_name = ''.join(arguments[1:])
 
     if key_name == '': 
@@ -115,10 +122,12 @@ def _parse_the_command(message) -> list:
     
     return [server_id, key_name]
 
+
 def _form_key_name(message) -> str:
     key_name = message.from_user.username
 
     return key_name
+
 
 monitoring.send_start_message()
 bot.infinity_polling()
