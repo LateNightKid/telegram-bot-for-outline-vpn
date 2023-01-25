@@ -59,7 +59,7 @@ def _make_new_key(message, server_id: ServerId, key_name: str):
 
     try:
         key = get_new_key(key_name, server_id)
-        _send_key(message, key)
+        _send_key(message, key, server_id)
 
     except KeyCreationError:
         error_message = "API error: cannot create the key"
@@ -75,15 +75,14 @@ def _make_new_key(message, server_id: ServerId, key_name: str):
         bot.send_message(message.chat.id, message_to_send)
 
 
-def _send_key(message, key):
+def _send_key(message, key, server_id):
 
         bot.send_message(
                 message.chat.id,
                 make_message_for_new_key(key.access_url)
                 )
         monitoring.new_key_created(key.kid, key.name, message.chat.id, 
-            message.from_user.username, message.from_user.first_name, 
-            message.from_user.last_name)
+            server_id)
 
 
 def _send_error_message(message, error_message):

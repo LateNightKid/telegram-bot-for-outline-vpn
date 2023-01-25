@@ -6,16 +6,13 @@ from config import MONITOR_API_TOKEN, ADMIN_CHAT_ID
 monitor = telebot.TeleBot(MONITOR_API_TOKEN)
 
 
-def new_key_created(key_id: int, key_name: str, chat_id: int, username: str,
-        firstname: str, lastname: str) -> None:
+def new_key_created(key_id: int, key_name: str, chat_id: int, server_id: int) -> None:
     answer = ("New key created:" + 
             "\nkey_id: "     + str(key_id) + 
             "\nkey_name: "   + str(key_name) + 
             "\nchat_id: "    + str(chat_id) + 
-            "\nusername: "   + str(username) + 
-            "\nfirst_name: " + str(firstname) + 
-            "\n last_name: " + str(lastname))
-
+            "\nserver_id: "  + str(server_id) 
+             )
     monitor.send_message(ADMIN_CHAT_ID, answer)
 
 
