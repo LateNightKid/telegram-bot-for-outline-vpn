@@ -1,21 +1,21 @@
 from config import OUTLINE_DOWNLOAD_LINK, servers_description
+from aliases import ServerId
 
 
-def make_message_for_new_key(access_url: str) -> str:
+def make_message_for_new_key(access_url: str, server_id: ServerId) -> str:
 
    message_to_send = ("Ваш ключ:\n\n" +
    "<code>" + access_url + "</code>" +
    "\n\nНажмите на него, чтобы скопировать." +
-   "\nСкачать Outline Client вы можете по ссылке: " + OUTLINE_DOWNLOAD_LINK)
+   "\n\nЛокация сервера: " + "<b>" + servers_description.get(server_id) + "</b>" +
+   "\n\nСкачать Outline Client вы можете по ссылке: " + OUTLINE_DOWNLOAD_LINK)
    return message_to_send
 
 
 def make_help_message() -> str:
 
     message_to_send = "Чтобы создать ключ, нажмите на кнопку. "\
-            "В этом случае в качестве имени ключа будет указан ваш @username\n"\
-            "Если вы хотите ввести другое имя ключа, "\
-            "воспользуйтесь следующей командой:\n\n"\
+            "\n\nТакже вы можете воспользоваться следующей командой:\n\n"\
             "<code>newkey server_id key_name</code>\n\n"\
             "<i>server_id</i> - это номер сервера.\n"\
             "<i>key_name</i> - это имя ключа.\n"\

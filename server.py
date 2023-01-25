@@ -79,7 +79,7 @@ def _send_key(message, key, server_id):
 
         bot.send_message(
                 message.chat.id,
-                make_message_for_new_key(key.access_url)
+                make_message_for_new_key(key.access_url, server_id)
                 )
         monitoring.new_key_created(key.kid, key.name, message.chat.id, 
             server_id)
