@@ -1,5 +1,4 @@
-from config import OUTLINE_DOWNLOAD_LINK
-from servers_description import servers_description
+from config import OUTLINE_DOWNLOAD_LINK, servers_description
 
 
 def make_message_for_new_key(access_url: str) -> str:

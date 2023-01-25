@@ -4,9 +4,7 @@ from typing import NamedTuple
 from exceptions import KeyCreationError, KeyRenamingError, InvalidServerIdError
 from urllib3.exceptions import InsecureRequestWarning
 from aliases import AccessUrl, KeyId, ServerId
-from servers_description import servers
-import pdb
-
+from config import servers
 
 
 class Key(NamedTuple):
