@@ -1,4 +1,4 @@
-from config import OUTLINE_DOWNLOAD_LINK, servers_description
+from config import OUTLINE_DOWNLOAD_LINK, servers_description, ADMIN_USERNAME_IN_HELP_MESSAGE
 from aliases import ServerId
 
 
@@ -22,7 +22,7 @@ def make_help_message() -> str:
             "Чтобы посмотреть список доступных серверов, введите /servers.\n"\
             "Пример использования команды:\n\n"\
             "<code>newkey 0 pashahacker</code>\n\n"\
-            "Если здесь не нашлось ответа на ваш вопрос, свяжитесь с @paveltessman\n\n"\
+            "Если здесь не нашлось ответа на ваш вопрос, свяжитесь с " + ADMIN_USERNAME_IN_HELP_MESSAGE + "\n\n"\
             "💙💛"
 
 

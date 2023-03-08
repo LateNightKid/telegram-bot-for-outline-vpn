@@ -20,8 +20,8 @@ DEFAULT_SERVER_ID = "0"
 
 
 #Message formatter settings
-OUTLINE_DOWNLOAD_LINK = 'https://getoutline.org/ru/get-started/'
-ADMIN_USERNAME_IN_HELP_MESSAGE = ''
+OUTLINE_DOWNLOAD_LINK = 'https://getoutline.org/ru/get-started/#step-3'
+ADMIN_USERNAME_IN_HELP_MESSAGE = os.getenv('ADMIN_USERNAME_IN_HELP_MESSAGE')
 
 
 #Monitoring bot settings
