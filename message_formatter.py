@@ -37,6 +37,3 @@ def make_servers_list() -> str:
 
 if __name__ == "__main__":
    print(make_message_for_new_key('test_url'))
-
-
-

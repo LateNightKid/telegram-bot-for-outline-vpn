@@ -37,10 +37,16 @@ def send_servers_list(message):
 
 @bot.message_handler(content_types = ['text'])
 def anwser(message):
-    if message.text == "Новый ключ":
+    if message.text == "Новый ключ RU":
         server_id = DEFAULT_SERVER_ID
         key_name = _form_key_name(message)
         _make_new_key(message, server_id, key_name)
+
+    elif message.text == "Новый ключ UA":
+        server_id = 2
+        key_name = _form_key_name(message)
+        _make_new_key(message, server_id, key_name)
+
     elif message.text == "Помощь":
         bot.send_message(message.chat.id, f.make_help_message())
 
@@ -96,11 +102,12 @@ def _send_error_message(message, error_message):
 def _make_main_menu_markup() -> types.ReplyKeyboardMarkup:
     menu_markup = types.ReplyKeyboardMarkup(resize_keyboard = True)
     
-    keygen_server1_button = types.KeyboardButton("Новый ключ")
+    keygen_server1_button = types.KeyboardButton("Новый ключ RU")
+    keygen_server2_button = types.KeyboardButton("Новый ключ UA")
     help_button = types.KeyboardButton("Помощь")
 
     menu_markup.add(
-            keygen_server1_button,
+            keygen_server1_button, keygen_server2_button,
             help_button
             )
     return menu_markup
