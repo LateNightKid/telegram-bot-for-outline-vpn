@@ -86,6 +86,8 @@ To add a server, you should:
 1. Append `'server_id':'api_url'` to the `servers` dictionary.
 2. Append `'server_id':'description string'` to the `servers_description` dictionary.
 
+Yeap, this is pretty nooby to have two dictionaries here, but hey... You have read the disclaimer `👈(ﾟヮﾟ👈)`.
+
 Here is the example of multi-server configuration.
 
 `config.py`:
