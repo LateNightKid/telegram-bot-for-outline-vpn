@@ -33,7 +33,7 @@ In this system there is also a small separate bot (yeah, the second one), made f
 
 There are two ways for user to communicate with the bot. The simplest one is to use buttons.
 
-`New key` button creates a new key for the default server and sends it to user. User's @username in that case will be used as a name of the key. For more details about the default server settings, see [adding servers](#adding-servers).
+`New key` button creates a new key for the default server and sends it to the user. User's @username in that case will be used as a name of the key. For more details about the default server settings, see [adding servers](#adding-servers).
 
 `Help` button sends some short help message. The message text can be changed in the `make_help_message` function, which is placed in `message_formatter.py`.
 
