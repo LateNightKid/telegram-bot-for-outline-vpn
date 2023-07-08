@@ -1,7 +1,7 @@
 # Telegram bot for creating OutlineVPN keys.
 
 > **Disclaimer:**
-> This project was fully designed and developed by person who is not a professional programmer at all. It probably contains bugs, non-optimal solutions, potential weaknesses, and other joys of entry-level developer's life. In practice, it has shown quite acceptable stability, without dropping at all for more of 12 months of runtime. But use it at your own risk.
+> This project was fully designed and developed by a person who is not a professional programmer at all. It probably contains bugs, non-optimal solutions, potential weaknesses, and other joys of entry-level developer's life. In practice, it has shown quite acceptable stability, without dropping at all for more of 12 months of runtime. But use it at your own risk.
 
 ## Contents
 
