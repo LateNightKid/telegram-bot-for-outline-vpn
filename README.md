@@ -78,6 +78,7 @@ In case you do not want to use environment variables, you then need to set all t
 If you have only one Outline server, it is enough to add its API URL to `OUTLINE_API_URL_0` variable. No other action is required.
 
 The bot is able to work with multiple servers. To add more servers, you should modify  `config.py` file.
+
 **Each server should has a unique `server_id` number** inside the bot, and also a short description. The id and description of each server are shown after the `/servers` command.
 Server with `server_id` = 0 is considered as **default server**. That means, when the user clicks on the `New key` button, the bot will create a key for server whose `server_id` is 0.
 
