@@ -41,7 +41,7 @@ There are two ways for user to communicate with the bot. The simplest one is to 
 
 There are several text commands for advanced use.
 
--   `/newkey <server_id> <key_name>`, where `server_id` is an internal unique id of each server, `key_name` is a string with a name of the key. Use `/servers` to see available server ids.
+-   `/newkey <server_id> <key_name>`, where `server_id` is an internal unique id of each server, `key_name` is a string with a name of the key. 
 -   `/help` to get help message.
 -   `/status` for checking the status of the system. With this command, the bot sends an HTTP request to each server, and forwards the HTTP response code to the admin's chat in Monitor Bot.
 -   `/servers` shows available servers with its `server_id`, and a short description for each one. 
