@@ -21,7 +21,7 @@ def send_status(message):
 @bot.message_handler(commands = ['start'])
 def send_welcome(message):
     bot.send_message(message.chat.id,
-    "Привет! Этот бот умеет выдавать ключи к прокси-серверу для сотрудников ITGenio.",
+    "Привет! Этот бот для создания ключей Outline VPN.",
     reply_markup = _make_main_menu_markup())
 
 
