@@ -50,7 +50,8 @@ There are several text commands for advanced use.
 
 ### Installing dependencies
 
-The bots are made with [PyTelegramBotAPI](https://github.com/eternnoir/pyTelegramBotAPI), so you need to install it:
+This project works on Python 3.10 and newer.
+The bot is made with [PyTelegramBotAPI](https://github.com/eternnoir/pyTelegramBotAPI), so you need to install it:
 
 ```
 pip install pyTelegramBotAPI
