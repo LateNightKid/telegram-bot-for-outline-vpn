@@ -29,4 +29,8 @@ MONITOR_API_TOKEN = os.getenv("MONITOR_API_TOKEN")
 ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID")
 
 
+BLOCKED_CHAT_IDS = [ 
+
+        ]
+
 
