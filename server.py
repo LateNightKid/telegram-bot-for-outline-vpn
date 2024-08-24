@@ -9,6 +9,7 @@ from message_formatter import make_message_for_new_key
 from aliases import ServerId
 #import pdb
 
+assert BOT_API_TOKEN is not None
 bot = telebot.TeleBot(BOT_API_TOKEN, parse_mode='HTML')
 
 
@@ -58,6 +59,12 @@ def anwser(message):
         server_id = DEFAULT_SERVER_ID
         key_name = _form_key_name(message)
         _make_new_key(message, server_id, key_name)
+
+    elif message.text == "Скачать приложение":
+        bot.send_message(message.chat.id,
+                         f.make_download_message(),
+                         disable_web_page_preview=True
+                         )
 
     elif message.text == "Помощь":
         bot.send_message(message.chat.id, f.make_help_message())
@@ -114,10 +121,12 @@ def _make_main_menu_markup() -> types.ReplyKeyboardMarkup:
     menu_markup = types.ReplyKeyboardMarkup(resize_keyboard = True)
     
     keygen_server1_button = types.KeyboardButton("Новый ключ")
+    download_button = types.KeyboardButton("Скачать приложение")
     help_button = types.KeyboardButton("Помощь")
 
     menu_markup.add(
             keygen_server1_button,
+            download_button,
             help_button
             )
     return menu_markup
