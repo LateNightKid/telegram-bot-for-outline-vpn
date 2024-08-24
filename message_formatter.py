@@ -1,4 +1,4 @@
-from config import OUTLINE_DOWNLOAD_LINK, servers_description, ADMIN_USERNAME_IN_HELP_MESSAGE
+from config import OUTLINE_DOWNLOAD_LINK, servers_description
 from aliases import ServerId
 
 
@@ -21,7 +21,7 @@ def make_help_message() -> str:
             "<i>key_name</i> - это имя ключа.\n"\
             "Чтобы посмотреть список доступных серверов, введите /servers.\n"\
             "Пример использования команды:\n\n"\
-            "<code>newkey 0 pashahacker</code>\n\n"\
+            "<code>/newkey 0 pashahacker</code>\n\n"\
 
 
     return message_to_send
