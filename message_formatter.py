@@ -22,7 +22,6 @@ def make_help_message() -> str:
             "Чтобы посмотреть список доступных серверов, введите /servers.\n"\
             "Пример использования команды:\n\n"\
             "<code>newkey 0 pashahacker</code>\n\n"\
-            "Если здесь не нашлось ответа на ваш вопрос, свяжитесь с " + ADMIN_USERNAME_IN_HELP_MESSAGE
 
 
     return message_to_send
