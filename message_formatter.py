@@ -1,15 +1,41 @@
-from config import OUTLINE_DOWNLOAD_LINK, servers_description
+from config import (
+    OUTLINE_WINDOWS_DOWNLOAD_LINK,
+    OUTLINE_MACOS_DOWNLOAD_LINK,
+    OUTLINE_LINUX_DOWNLOAD_LINK,
+    OUTLINE_CHOMEOS_DOWNLOAD_LINK,
+    OUTLINE_IOS_DOWNLOAD_LINK,
+    OUTLINE_ANDROID_DOWNLOAD_LINK,
+    OUTLINE_ANDROID_APK_DOWNLOAD_LINK,
+    servers_description
+    )
 from aliases import ServerId
+from textwrap import dedent
 
 
 def make_message_for_new_key(access_url: str, server_id: ServerId) -> str:
 
-   message_to_send = ("Ваш ключ:\n\n" +
-   "<code>" + access_url + "</code>" +
-   "\n\nНажмите на него, чтобы скопировать." +
-   "\n\nЛокация сервера: " + "<b>" + servers_description.get(server_id) + "</b>" +
-   "\n\nСкачать Outline Client вы можете по ссылке: " + OUTLINE_DOWNLOAD_LINK)
+   message_to_send = dedent(
+f"""Ваш ключ:
+   \n<code>{access_url}</code>
+   \nНажмите на него, чтобы скопировать.
+   \nЛокация сервера: <b>{servers_description.get(server_id)}</b>
+   \nЭтот ключ нужно вставить в приложение <b>Outline Client.</b>
+   """)
    return message_to_send
+
+
+def make_download_message() -> str:
+    message_to_send = dedent(
+    f"""
+   <a href="{OUTLINE_WINDOWS_DOWNLOAD_LINK}">Скачать для Windows</a>
+   <a href="{OUTLINE_MACOS_DOWNLOAD_LINK}">Скачать для MacOS</a>
+   <a href="{OUTLINE_LINUX_DOWNLOAD_LINK}">Скачать для Linux</a>
+   <a href="{OUTLINE_CHOMEOS_DOWNLOAD_LINK}">Скачать для ChromeOS</a>
+   <a href="{OUTLINE_IOS_DOWNLOAD_LINK}">Скачать для iOS</a>
+   <a href="{OUTLINE_ANDROID_DOWNLOAD_LINK}">Скачать для Android</a>
+   <a href="{OUTLINE_ANDROID_APK_DOWNLOAD_LINK}">Скачать apk-файл для Android</a>
+    """)
+    return message_to_send
 
 
 def make_help_message() -> str:
@@ -34,5 +60,3 @@ def make_servers_list() -> str:
         message_to_send += f'server_id: {server_id}, location: {description}\n'
     return message_to_send
 
-if __name__ == "__main__":
-   print(make_message_for_new_key('test_url'))
