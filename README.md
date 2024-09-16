@@ -1,13 +1,10 @@
 # Telegram bot for creating OutlineVPN keys.
 
-> **Disclaimer:**
-> This project was fully designed and developed by a person who is not a professional programmer at all. It probably contains bugs, non-optimal solutions, potential weaknesses, and other joys of entry-level developer's life. In practice, it has shown quite acceptable stability, without dropping at all for more of 12 months of runtime. But use it at your own risk.
-
 ## Contents
 
 -   [Known issues](#known-issues)
 -   [General description](#general-description)
--   [Commands and features](#comands-and-features)
+-   [Features overview](#features-overview)
     -   [Using buttons](#using-buttons)
     -   [Using text commands](#using-text-commands)
 -   [How to install & set up](#How-to-install-&-set-up)
@@ -19,32 +16,35 @@
 
 ## Known issues
 
-If Outline server is down, the bot freezes for a minute after sending any request, until the timeout exception is thrown ``¯\_( ͡° ͜ʖ ͡°)_/¯`` Asynchronous calls to be made in the future.
+If Outline server is down, the bot hangs up for a minute after sending a request, until the timeout exception is thrown ``¯\_( ͡° ͜ʖ ͡°)_/¯`` Asynchronous calls to be made in the future.
 
 ## General Description
 
-This system was made in order to automate the process of connecting users to the Outline server. Using this Telegram bot, a user can get a key and connect to the server without involvement of a server's admin. When the user creates a new key, the bot sends an API request to the Outline server and forwards server's answer with the key to the user.
+Suppose, you're an admin of one or more Outine VPN servers. And suppose, you want to share keys with users, but don't want to be bothered by them every time they need a key.
+This project will help you. With this Telegram bot, a user can obtain a server key without your participation.
 
-In this system there is also a small separate bot (yeah, the second one), made for monitoring purpose (further in the text it is called **Monitor Bot**). It notifies the admin that a key was created, and sends some details, such as chat id, username, etc. These notifications are intended to keep the admin informed in case of uncontrolled key creation.
+This project consists of a Telegram bot which for interacting woth users, Outline API module for creating keys and a small monitoring bot for you to be aware of when somebody creates a key. When the user obtains a new key, the bot sends an API request to the Outline server, gets a new key and forwards the key to the user. At the same time you get a message from a monitoring bot that a new key has been created.
 
-## Commands and features
+## Features overview
 
 ### Using buttons
 
-There are two ways for user to communicate with the bot. The simplest one is to use buttons.
+There are two ways for the user to communicate with the bot. The simplest one is to use buttons.
 
-`New key` button creates a new key for the default server and sends it to the user. User's @username in that case will be used as a name of the key. For more details about the default server settings, see [adding servers](#adding-servers).
+`New key` button creates a new key for the default server. User's @username in that case will be used as a name of the key. 
 
-`Help` button sends some short help message. The message text can be changed in the `make_help_message` function, which is placed in `message_formatter.py`.
+`Download Outline` button to get a list of download links for different devices.
+
+`Help` button sends some short help message. You can change the message text in the `make_help_message` function, which is placed in `message_formatter.py`.
 
 ### Using text commands
 
 There are several text commands for advanced use.
 
--   `/newkey <server_id> <key_name>`, where `server_id` is an internal unique id of each server, `key_name` is a string with a name of the key. 
+-   `/newkey <server_id> <key_name>`, where `server_id` is an internal unique id of each server, `key_name` is a string with the name for the key. 
 -   `/help` to get help message.
--   `/status` for checking the status of the system. With this command, the bot sends an HTTP request to each server, and forwards the HTTP response code to the admin's chat in Monitor Bot.
--   `/servers` shows available servers with its `server_id`, and a short description for each one. 
+-   `/status` to check if the servers are up. With this command, the bot sends an HTTP request to each server, and forwards the HTTP response code to the admin's chat in Monitor Bot.
+-   `/servers` to show available servers with its `server_id`, and a short description for each one. 
 
 ## How to install & set up
 
@@ -65,29 +65,31 @@ pip install requests
 
 ### Configuring
 
-The script gets bot tokens and Outline API URLs from the following environment variables:
+To understand how the configuration works, let's consider a basic example when you have only one Oultline server.
 
--   `OUTLINE_API_URL_0` - the URL which is used to access the Management API of your Outline Server. You can find this URL in the Outline Manager Settings tab, or in the output of script you ran while installing your Outline Server.
--   `BOT_API_TOKEN` - the [API-token](https://core.telegram.org/bots#how-do-i-create-a-bot) of main Telegram bot (that users will work with).
--   `MONITOR_API_TOKEN` - API-token of Monitor Telegram-bot. Can be the same as the main bot's token. In that case, all the monitoring messages will be sent in the admin's chat of the main bot.
--   `ADMIN_CHAT_ID` - A unique id of admin's chat in Monitor Bot. You can find out your chat id by running `get_admin_chat_id.py` script. 
+Set the following environment variables:
 
-In case you do not want to use environment variables, you then need to set all the variables directly in `config.py` file. In that file you can also modify the `OUTLINE_DOWNLOAD_LINK` - link for downloading the Client App, that the bot will send to user after creating the key.
+-   `OUTLINE_API_URL_0` - the URL to access the Management API of your Outline Server. You can find that URL in the Outline Manager Settings tab, or in the output of the script you ran when installing your Outline Server.
+-   `BOT_API_TOKEN` - the [API-token](https://core.telegram.org/bots#how-do-i-create-a-bot) of the main Telegram bot (that users will interact with).
+-   `MONITOR_API_TOKEN` - the API-token of the Telegram-bot that will be sending notifications to you. If equals to `BOT_API_TOKEN`, then all the monitoring messages will be sent in the admin's chat of the main bot.
+-   `ADMIN_CHAT_ID` - A unique id of the admin's chat in Monitor Bot. To find out your chat id, run `get_admin_chat_id.py` script. It will tell you what to do.
+
+In case you do not want to use environment variables, you can set all the variables directly in `config.py` file. In that file you can also modify the download links that bot will be sending to users.
+
+Also, you should look at `servers_description` in the `config.py` and change the description for your server. This is the description that users will see when creating a key or listing available servers. I personally prefer specifying server's location.
+
+That's all for one-server-configuration. After you've done all the steps, run `server.py` to start the bot.
 
 ### Adding servers
 
-If you have only one Outline server, it is enough to add its API URL to `OUTLINE_API_URL_0` variable. No other action is required.
+The bot is able to work with multiple servers. To add more servers, you should modify  `config.py` file:
 
-The bot is able to work with multiple servers. To add more servers, you should modify  `config.py` file.
-
-**Each server should has a unique `server_id` number** inside the bot, and also a short description. The id and description of each server are shown to  users after the `/servers` command.
-Server with `server_id` = 0 is considered as **default server**. That means, when the user clicks on the `New key` button, the bot will create a key for server whose `server_id` is 0.
-
-To add a server, you should:
 1. Append `'server_id':'api_url'` to the `servers` dictionary.
 2. Append `'server_id':'description string'` to the `servers_description` dictionary.
 
-Yeap, this is pretty silly to have two dictionaries here, but hey... You have read the disclaimer `👈(ﾟヮﾟ👈)`.
+Yeap, that's pretty lame to have two dictionaries here, I know... I hope I will be able to change the design soon.
+
+Server with `server_id` = 0 is considered as **default server**. That means, when the user clicks on the `New key` button, the bot will create a key for server whose `server_id` is 0.
 
 Here is the example of multi-server configuration.
 
@@ -116,9 +118,3 @@ servers_description = {
         ...
         }
 ```
-
-### Starting the bot
-
-After the setup is complete, run `server.py` to start the bot.
-
-
