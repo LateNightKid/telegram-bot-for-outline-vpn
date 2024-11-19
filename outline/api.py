@@ -1,19 +1,13 @@
 import requests
 import json
-from typing import NamedTuple
 from urllib3.exceptions import InsecureRequestWarning
 from helpers.aliases import AccessUrl, KeyId, ServerId
+from helpers.classes import OutlineKey
 from helpers.exceptions import KeyCreationError, KeyRenamingError, InvalidServerIdError
 from settings import servers
 
 
-class Key(NamedTuple):
-    kid: KeyId
-    name: str
-    access_url: AccessUrl
-
-
-def get_new_key(key_name: str | None, server_id: ServerId) -> Key:
+def get_new_key(key_name: str | None, server_id: ServerId) -> OutlineKey:
 
     if servers.get(server_id) == None:
         raise InvalidServerIdError
@@ -27,7 +21,7 @@ def get_new_key(key_name: str | None, server_id: ServerId) -> Key:
         key_name = "key_id:" + key_id
 
     _rename_key(key_id, key_name, server_id)
-    key = Key(kid=key_id, name=key_name, access_url=access_url)
+    key = OutlineKey(kid=key_id, name=key_name, access_url=access_url)
 
     return key
 

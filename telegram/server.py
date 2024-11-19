@@ -1,7 +1,8 @@
 import telebot
 from telebot import types
 import telegram.monitoring as monitoring
-from outline.api import get_new_key
+import outline.api as outline
+import warp.controller as warp
 from settings import BOT_API_TOKEN, DEFAULT_SERVER_ID, BLOCKED_CHAT_IDS
 from helpers.exceptions import KeyCreationError, KeyRenamingError, InvalidServerIdError
 import telegram.message_formatter as f
@@ -54,12 +55,16 @@ def send_servers_list(message):
 @bot.message_handler(content_types = ['text'])
 @check_blacklist
 def anwser(message):
-    if message.text == "Новый ключ":
+    if message.text == "Новый ключ Outline":
         server_id = DEFAULT_SERVER_ID
         key_name = _form_key_name(message)
         _make_new_key(message, server_id, key_name)
 
-    elif message.text == "Скачать приложение":
+    elif message.text == "Новый ключ Amnezia":
+        key_name = _form_key_name(message)
+        _make_new_key(message, "amnezia", key_name)
+
+    elif message.text == "Скачать Outline":
         bot.send_message(message.chat.id,
                          f.make_download_message(),
                          disable_web_page_preview=True
@@ -81,7 +86,11 @@ def anwser(message):
 def _make_new_key(message, server_id: ServerId, key_name: str):
 
     try:
-        key = get_new_key(key_name, server_id)
+        if server_id == "amnezia":
+            key = warp.get_new_key(key_name, server_id)
+        else:
+            key = outline.get_new_key(key_name, server_id)
+
         _send_key(message, key, server_id)
 
     except KeyCreationError:
@@ -100,12 +109,17 @@ def _make_new_key(message, server_id: ServerId, key_name: str):
 
 def _send_key(message, key, server_id):
 
-        bot.send_message(
-                message.chat.id,
-                f.make_message_for_new_key(key.access_url, server_id)
-                )
-        monitoring.new_key_created(key.kid, key.name, message.chat.id, 
-            server_id)
+    if server_id == "amnezia":
+        text = f.make_message_for_new_key("amnezia", key.access_url, server_id)
+    else:
+        text = f.make_message_for_new_key("outline", key.access_url, server_id)
+
+    bot.send_message(
+            message.chat.id,
+            text
+            )
+    monitoring.new_key_created(key.kid, key.name, message.chat.id, 
+        server_id)
 
 
 def _send_error_message(message, error_message):
@@ -119,12 +133,14 @@ def _send_error_message(message, error_message):
 def _make_main_menu_markup() -> types.ReplyKeyboardMarkup:
     menu_markup = types.ReplyKeyboardMarkup(resize_keyboard = True)
     
-    keygen_server1_button = types.KeyboardButton("Новый ключ")
-    download_button = types.KeyboardButton("Скачать приложение")
+    keygen_server1_button = types.KeyboardButton("Новый ключ Outline")
+    keygen_amnezia_button = types.KeyboardButton("Новый ключ Amnezia")
+    download_button = types.KeyboardButton("Скачать Outline")
     help_button = types.KeyboardButton("Помощь")
 
     menu_markup.add(
             keygen_server1_button,
+            keygen_amnezia_button,
             download_button,
             help_button
             )

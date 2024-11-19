@@ -12,15 +12,30 @@ from helpers.aliases import ServerId
 from textwrap import dedent
 
 
-def make_message_for_new_key(access_url: str, server_id: ServerId) -> str:
+def make_message_for_new_key(app: str, access_key: str,
+                             server_id: ServerId) -> str:
+   #TODO: Add enum class for app.
 
-   message_to_send = dedent(
-f"""Ваш ключ:
-   \n<code>{access_url}</code>
-   \nНажмите на него, чтобы скопировать.
-   \nЛокация сервера: <b>{servers_description.get(server_id)}</b>
-   \nЭтот ключ нужно вставить в приложение <b>Outline Client.</b>
-   """)
+   if app == "outline":
+      message_to_send = dedent(
+   f"""Ваш ключ:
+      \n<code>{access_key}</code>
+      \nНажмите на него, чтобы скопировать.
+      \nЛокация сервера: <b>{servers_description.get(server_id)}</b>
+      \nЭтот ключ нужно вставить в приложение <b>Outline Client.</b>
+      """)
+
+   elif app == "amnezia":
+      message_to_send = dedent(
+   f"""Ваш ключ:
+      \n<code>{access_key}</code>
+      \nНажмите на него, чтобы скопировать.
+      \nЭтот ключ нужно вставить в приложение <b>Amnezia VPN.</b>
+      """)
+   else:
+      # TODO
+      raise Exception
+
    return message_to_send
 
 
@@ -59,4 +74,3 @@ def make_servers_list() -> str:
     for server_id, description in servers_description.items():
         message_to_send += f'server_id: {server_id}, location: {description}\n'
     return message_to_send
-
