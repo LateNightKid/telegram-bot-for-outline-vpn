@@ -1,6 +1,6 @@
 import telebot
-from outline_api_service import check_api_status
-from config import MONITOR_API_TOKEN, ADMIN_CHAT_ID
+from outline.api import check_api_status
+from settings import MONITOR_API_TOKEN, ADMIN_CHAT_ID
 
 
 monitor = telebot.TeleBot(MONITOR_API_TOKEN)

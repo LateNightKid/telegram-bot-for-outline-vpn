@@ -1,13 +1,12 @@
 import telebot
 from telebot import types
-import monitoring
-from outline_api_service import get_new_key
-from config import BOT_API_TOKEN, DEFAULT_SERVER_ID, BLOCKED_CHAT_IDS
-from exceptions import KeyCreationError, KeyRenamingError, InvalidServerIdError
-import message_formatter as f
-from message_formatter import make_message_for_new_key
-from aliases import ServerId
-#import pdb
+import telegram.monitoring as monitoring
+from outline.api import get_new_key
+from settings import BOT_API_TOKEN, DEFAULT_SERVER_ID, BLOCKED_CHAT_IDS
+from helpers.exceptions import KeyCreationError, KeyRenamingError, InvalidServerIdError
+import telegram.message_formatter as f
+from helpers.aliases import ServerId
+
 
 assert BOT_API_TOKEN is not None
 bot = telebot.TeleBot(BOT_API_TOKEN, parse_mode='HTML')
@@ -103,7 +102,7 @@ def _send_key(message, key, server_id):
 
         bot.send_message(
                 message.chat.id,
-                make_message_for_new_key(key.access_url, server_id)
+                f.make_message_for_new_key(key.access_url, server_id)
                 )
         monitoring.new_key_created(key.kid, key.name, message.chat.id, 
             server_id)
@@ -154,5 +153,6 @@ def _form_key_name(message) -> str:
     return key_name
 
 
-monitoring.send_start_message()
-bot.infinity_polling()
+def start_telegram_server():
+    monitoring.send_start_message()
+    bot.infinity_polling()

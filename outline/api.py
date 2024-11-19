@@ -1,10 +1,10 @@
 import requests
 import json
 from typing import NamedTuple
-from exceptions import KeyCreationError, KeyRenamingError, InvalidServerIdError
 from urllib3.exceptions import InsecureRequestWarning
-from aliases import AccessUrl, KeyId, ServerId
-from config import servers
+from helpers.aliases import AccessUrl, KeyId, ServerId
+from helpers.exceptions import KeyCreationError, KeyRenamingError, InvalidServerIdError
+from settings import servers
 
 
 class Key(NamedTuple):

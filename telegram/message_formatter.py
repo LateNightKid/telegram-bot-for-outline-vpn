@@ -1,4 +1,4 @@
-from config import (
+from settings import (
     OUTLINE_WINDOWS_DOWNLOAD_LINK,
     OUTLINE_MACOS_DOWNLOAD_LINK,
     OUTLINE_LINUX_DOWNLOAD_LINK,
@@ -8,7 +8,7 @@ from config import (
     OUTLINE_ANDROID_APK_DOWNLOAD_LINK,
     servers_description
     )
-from aliases import ServerId
+from helpers.aliases import ServerId
 from textwrap import dedent
 
 
