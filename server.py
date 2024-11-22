@@ -25,12 +25,14 @@ def authorize(func):
 
         chat_id_to_check = message.chat.id
 
-        if BLACKLIST and str(chat_id_to_check) in BLOCKED_CHAT_IDS:
-            #  TODO: monitoring
+        if BLACKLIST and str(chat_id_to_check) in BLACKLISTED_CHAT_IDS:
+            monitoring.report_blacklist_attempt(message.from_user.username,
+                                                chat_id_to_check)
             return
 
         if WHITELIST and str(chat_id_to_check) not in WHITELISTED_CHAT_IDS:
-            #  TODO: monitoring
+            monitoring.report_not_in_whitelist(message.from_user.username,
+                                                chat_id_to_check)
             return
 
         return func(message)
