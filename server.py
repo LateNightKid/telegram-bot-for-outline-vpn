@@ -2,7 +2,14 @@ import telebot
 from telebot import types
 import monitoring
 from outline_api_service import get_new_key
-from config import BOT_API_TOKEN, DEFAULT_SERVER_ID, BLOCKED_CHAT_IDS
+from config import (
+        BOT_API_TOKEN,
+        DEFAULT_SERVER_ID,
+        BLOCKED_CHAT_IDS,
+        WHITELISTED_CHAT_IDS,
+        BLACKLIST,
+        WHITELIST
+        )
 from exceptions import KeyCreationError, KeyRenamingError, InvalidServerIdError
 import message_formatter as f
 from message_formatter import make_message_for_new_key
@@ -13,47 +20,51 @@ assert BOT_API_TOKEN is not None
 bot = telebot.TeleBot(BOT_API_TOKEN, parse_mode='HTML')
 
 
-def check_blacklist(func):
+def authorize(func):
     def wrapper(message):
+
         chat_id_to_check = message.chat.id
 
-        if str(chat_id_to_check) in BLOCKED_CHAT_IDS:
-            print('here!')
+        if BLACKLIST and str(chat_id_to_check) in BLOCKED_CHAT_IDS:
+            #  TODO: monitoring
             return
-        else:
-            return func(message)
 
+        if WHITELIST and str(chat_id_to_check) not in WHITELISTED_CHAT_IDS:
+            #  TODO: monitoring
+            return
+
+        return func(message)
     return wrapper
 
 
-@check_blacklist
 @bot.message_handler(commands = ['status'])
+@authorize
 def send_status(message):
     monitoring.send_api_status()
 
 
-@check_blacklist
 @bot.message_handler(commands = ['start'])
+@authorize
 def send_welcome(message):
     bot.send_message(message.chat.id,
     "Привет! Этот бот для создания ключей Outline VPN.",
     reply_markup = _make_main_menu_markup())
 
     
-@check_blacklist
 @bot.message_handler(commands = ['help'])
+@authorize
 def send_help(message):
     bot.send_message(message.chat.id, f.make_help_message())
 
 
-@check_blacklist
 @bot.message_handler(commands = ['servers'])
+@authorize
 def send_servers_list(message):
     bot.send_message(message.chat.id, f.make_servers_list())
 
 
 @bot.message_handler(content_types = ['text'])
-@check_blacklist
+@authorize
 def anwser(message):
     if message.text == "Новый ключ":
         server_id = DEFAULT_SERVER_ID
