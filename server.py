@@ -5,7 +5,7 @@ from outline_api_service import get_new_key
 from config import (
         BOT_API_TOKEN,
         DEFAULT_SERVER_ID,
-        BLOCKED_CHAT_IDS,
+        BLACKLISTED_CHAT_IDS,
         WHITELISTED_CHAT_IDS,
         BLACKLIST,
         WHITELIST
