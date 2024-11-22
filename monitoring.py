@@ -2,6 +2,8 @@ import telebot
 from outline_api_service import check_api_status
 from config import MONITOR_API_TOKEN, ADMIN_CHAT_ID
 
+assert MONITOR_API_TOKEN is not None
+assert ADMIN_CHAT_ID is not None
 
 monitor = telebot.TeleBot(MONITOR_API_TOKEN)
 
