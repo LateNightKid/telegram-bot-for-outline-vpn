@@ -18,6 +18,14 @@ servers_description = {             # {'server_id' : 'description'}
 BOT_API_TOKEN = os.getenv("BOT_API_TOKEN")
 DEFAULT_SERVER_ID = "0"
 
+BLACKLIST = True
+WHITELIST = False
+
+BLOCKED_CHAT_IDS = [ 
+                    ]
+
+WHITELISTED_CHAT_IDS = [
+                ]
 
 #Message formatter settings
 OUTLINE_WINDOWS_DOWNLOAD_LINK = "https://s3.amazonaws.com/outline-releases/client/windows/stable/Outline-Client.exe"
@@ -34,8 +42,5 @@ MONITOR_API_TOKEN = os.getenv("MONITOR_API_TOKEN")
 ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID")
 
 
-BLOCKED_CHAT_IDS = [ 
-
-        ]
 
 
