@@ -42,3 +42,21 @@ def send_api_status() -> None:
 def send_start_message():
     monitor.send_message(ADMIN_CHAT_ID, "-----BOT-STARTED!-----")
     send_api_status()
+
+
+def report_not_in_whitelist(username: str, chat_id: str) -> None:
+
+    msg = ("User tried to do something, but they are not in the whitelist.\n" +
+           f"username: {username}\n" + 
+           f"chat_id: {chat_id}")
+
+    monitor.send_message(ADMIN_CHAT_ID, msg)
+
+
+def report_blacklist_attempt(username: str, chat_id: str) -> None:
+
+    msg = ("User tried to do something, but they are blacklisted.\n" +
+           f"username: {username}\n" + 
+           f"chat_id: {chat_id}")
+
+    monitor.send_message(ADMIN_CHAT_ID, msg)
