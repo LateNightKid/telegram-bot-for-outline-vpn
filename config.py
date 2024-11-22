@@ -40,7 +40,3 @@ OUTLINE_ANDROID_APK_DOWNLOAD_LINK = "https://s3.amazonaws.com/outline-releases/c
 #Monitoring bot settings
 MONITOR_API_TOKEN = os.getenv("MONITOR_API_TOKEN")
 ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID")
-
-
-
-
