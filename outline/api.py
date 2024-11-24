@@ -32,15 +32,15 @@ def check_api_status() -> dict:
     global servers
     _disable_ssl_warnings()
     api_status_codes = {}
-    for server_id, api_token in servers.items():
-        url = api_token + '/access-keys'
+    for server_id, server in servers.items():
+        url = server.api_url + '/access-keys'
         r = requests.get(url, verify=False)
         api_status_codes.update({server_id: str(r.status_code)})
     return api_status_codes
 
 
 def _create_new_key(server_id: ServerId) -> dict:
-    request_url = servers.get(server_id) + '/access-keys'
+    request_url = servers[server_id].api_url + '/access-keys'
     r = requests.post(request_url, verify=False)    
 
     if int(r.status_code) != 201:
@@ -54,7 +54,7 @@ def _parse_response(response: requests.models.Response) -> dict:
 
 
 def _rename_key(key_id: KeyId, key_name: str | None, server_id: ServerId) -> None:
-    rename_url = servers.get(server_id) + '/access-keys/' + key_id + '/name'
+    rename_url = servers[server_id].api_url + '/access-keys/' + key_id + '/name'
     r = requests.put(rename_url, data = {'name': key_name}, verify=False)  
     if int(r.status_code) != 204: 
         raise KeyRenamingError
