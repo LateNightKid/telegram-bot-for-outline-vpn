@@ -35,7 +35,7 @@ def send_status(message):
 @bot.message_handler(commands = ['start'])
 def send_welcome(message):
     bot.send_message(message.chat.id,
-    "Привет! Этот бот для создания ключей Outline VPN.",
+    "Hey! This bot is used for creating Outline keys.",
     reply_markup = _make_main_menu_markup())
 
     
@@ -54,18 +54,18 @@ def send_servers_list(message):
 @bot.message_handler(content_types = ['text'])
 @check_blacklist
 def anwser(message):
-    if message.text == "Новый ключ Outline":
+    if message.text == "New Outline Key":
         server_id = DEFAULT_SERVER_ID
         key_name = _form_key_name(message)
         _make_new_key(message, server_id, key_name)
 
-    elif message.text == "Скачать Outline":
+    elif message.text == "Download Outline":
         bot.send_message(message.chat.id,
                          f.make_download_message(),
                          disable_web_page_preview=True
                          )
 
-    elif message.text == "Помощь":
+    elif message.text == "Help":
         bot.send_message(message.chat.id, f.make_help_message())
 
     elif message.text[:7] == "/newkey":
@@ -74,7 +74,7 @@ def anwser(message):
 
     else:
         bot.send_message(message.chat.id,
-                "Команда не распознана.\nИспользуйте /help, чтобы узнать список доступных команд.",
+                "Unknown command.",
                 reply_markup = _make_main_menu_markup())
                 
 
@@ -94,8 +94,7 @@ def _make_new_key(message, server_id: ServerId, key_name: str):
         _send_error_message(message, error_message)
 
     except InvalidServerIdError:
-        message_to_send = "Сервер с таким ID отсутствует в списке серверов.\n"\
-        "Введите /servers, чтобы узнать доступные ID"
+        message_to_send = "The server id does not exist."
         bot.send_message(message.chat.id, message_to_send)
 
 
@@ -122,9 +121,9 @@ def _send_error_message(message, error_message):
 def _make_main_menu_markup() -> types.ReplyKeyboardMarkup:
     menu_markup = types.ReplyKeyboardMarkup(resize_keyboard = True)
     
-    keygen_server1_button = types.KeyboardButton("Новый ключ Outline")
-    download_button = types.KeyboardButton("Скачать Outline")
-    help_button = types.KeyboardButton("Помощь")
+    keygen_server1_button = types.KeyboardButton("New Outline Key")
+    download_button = types.KeyboardButton("Download Outline")
+    help_button = types.KeyboardButton("Help")
 
     menu_markup.add(
             keygen_server1_button,

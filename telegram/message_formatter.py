@@ -16,11 +16,11 @@ def make_message_for_new_key(app: str, access_key: str,
                              server_id: ServerId) -> str:
    if app == "outline":
       message_to_send = dedent(
-   f"""Ваш ключ:
+   f"""Your key:
       \n<code>{access_key}</code>
-      \nНажмите на него, чтобы скопировать.
-      \nЛокация сервера: <b>{servers[server_id].location}</b>
-      \nЭтот ключ нужно вставить в приложение <b>Outline Client.</b>
+      \nTap to copy.
+      \nServer is located in: <b>{servers[server_id].location}</b>
+      \nThis key should be pased in <b>Outline Client.</b>
       """)
 
    else:
@@ -33,27 +33,20 @@ def make_message_for_new_key(app: str, access_key: str,
 def make_download_message() -> str:
     message_to_send = dedent(
     f"""
-   <a href="{OUTLINE_WINDOWS_DOWNLOAD_LINK}">Скачать для Windows</a>
-   <a href="{OUTLINE_MACOS_DOWNLOAD_LINK}">Скачать для MacOS</a>
-   <a href="{OUTLINE_LINUX_DOWNLOAD_LINK}">Скачать для Linux</a>
-   <a href="{OUTLINE_CHOMEOS_DOWNLOAD_LINK}">Скачать для ChromeOS</a>
-   <a href="{OUTLINE_IOS_DOWNLOAD_LINK}">Скачать для iOS</a>
-   <a href="{OUTLINE_ANDROID_DOWNLOAD_LINK}">Скачать для Android</a>
-   <a href="{OUTLINE_ANDROID_APK_DOWNLOAD_LINK}">Скачать apk-файл для Android</a>
+   <a href="{OUTLINE_WINDOWS_DOWNLOAD_LINK}">Download for Windows</a>
+   <a href="{OUTLINE_MACOS_DOWNLOAD_LINK}">Download for MacOS</a>
+   <a href="{OUTLINE_LINUX_DOWNLOAD_LINK}">Download for Linux</a>
+   <a href="{OUTLINE_CHOMEOS_DOWNLOAD_LINK}">Download for ChromeOS</a>
+   <a href="{OUTLINE_IOS_DOWNLOAD_LINK}">Download for iOS</a>
+   <a href="{OUTLINE_ANDROID_DOWNLOAD_LINK}">Download for Android</a>
+   <a href="{OUTLINE_ANDROID_APK_DOWNLOAD_LINK}">Download APK</a>
     """)
     return message_to_send
 
 
 def make_help_message() -> str:
 
-    message_to_send = "Чтобы создать ключ, нажмите на кнопку. "\
-            "\n\nТакже вы можете воспользоваться следующей командой:\n\n"\
-            "<code>/newkey server_id key_name</code>\n\n"\
-            "<i>server_id</i> - это номер сервера.\n"\
-            "<i>key_name</i> - это имя ключа.\n"\
-            "Чтобы посмотреть список доступных серверов, введите /servers.\n"\
-            "Пример использования команды:\n\n"\
-            "<code>/newkey 0 pashahacker</code>\n\n"\
+    message_to_send = "Press the button to create a key. "\
 
 
     return message_to_send
