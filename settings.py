@@ -1,41 +1,51 @@
-import os
+from helpers.classes import OutlineServer
+import json
 
 
-#Outline api servers settings
-OUTLINE_API_URL_0 = os.getenv('OUTLINE_API_URL_0')
+JSON_FILENAME = "devsettings.json"
 
-servers ={                          # {'server_id':'api_url'}
-        '0': OUTLINE_API_URL_0
-        }
+with open(JSON_FILENAME, 'r') as file:
+    settings = json.load(file)
 
-
-servers_description = {             # {'server_id' : 'description'}
-        '0': 'Амстердам'
-        }
+_tg_settings = settings['tg_bot_settings']
+_outline_dl_links = settings['outline_dl_links']
 
 
-#Main bot settings
-BOT_API_TOKEN = os.getenv("BOT_API_TOKEN")
-DEFAULT_SERVER_ID = "0"
+BOT_API_TOKEN = _tg_settings['main_bot_api_token']
+MONITOR_API_TOKEN = _tg_settings['monitor_bot_api_token']
+
+ADMIN_CHAT_ID = _tg_settings['admin_chat_id']
+
+DEFAULT_SERVER_ID = _tg_settings['default_server_id']
+
+ENABLE_BLACKLIST = _tg_settings['enable_blacklist']
+ENABLE_WHITELIST = _tg_settings['enable_whitelist']
+
+BLACKLISTED_CHAT_IDS = _tg_settings['blacklisted_chat_ids']
+WHITELISTED_CHAT_IDS = _tg_settings['whitelisted_chat_ids']
+
+OUTLINE_WINDOWS_DOWNLOAD_LINK = _outline_dl_links['windows']
+OUTLINE_MACOS_DOWNLOAD_LINK = _outline_dl_links['macos']
+OUTLINE_LINUX_DOWNLOAD_LINK = _outline_dl_links['linux']
+OUTLINE_CHOMEOS_DOWNLOAD_LINK = _outline_dl_links['chromeos']
+OUTLINE_IOS_DOWNLOAD_LINK = _outline_dl_links['android']
+OUTLINE_ANDROID_DOWNLOAD_LINK = _outline_dl_links['android']
+OUTLINE_ANDROID_APK_DOWNLOAD_LINK = _outline_dl_links['apk']
 
 
-#Message formatter settings
-OUTLINE_WINDOWS_DOWNLOAD_LINK = "https://s3.amazonaws.com/outline-releases/client/windows/stable/Outline-Client.exe"
-OUTLINE_MACOS_DOWNLOAD_LINK = "https://itunes.apple.com/us/app/outline-app/id1356178125"
-OUTLINE_LINUX_DOWNLOAD_LINK = "https://s3.amazonaws.com/outline-releases/client/linux/stable/Outline-Client.AppImage"
-OUTLINE_CHOMEOS_DOWNLOAD_LINK = "https://play.google.com/store/apps/details?id=org.outline.android.client"
-OUTLINE_IOS_DOWNLOAD_LINK = "https://itunes.apple.com/us/app/outline-app/id1356177741"
-OUTLINE_ANDROID_DOWNLOAD_LINK = "https://play.google.com/store/apps/details?id=org.outline.android.client"
-OUTLINE_ANDROID_APK_DOWNLOAD_LINK = "https://s3.amazonaws.com/outline-releases/client/android/stable/Outline-Client.apk"
+def _read_outline_servers_from_settings() -> dict[str, OutlineServer]:
 
+    servers = {}
+    for server in settings['outline_servers']:
+        if server['is_enabled']:
+            id = server['id']
+            srv = OutlineServer(
+                    api_url=server.get('api_url'),
+                    location=server.get('location'),
+                    is_enabled=True)
 
-#Monitoring bot settings
-MONITOR_API_TOKEN = os.getenv("MONITOR_API_TOKEN")
-ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID")
+            servers[id] = srv
+    return servers
+                
 
-
-BLOCKED_CHAT_IDS = [ 
-
-        ]
-
-
+servers = _read_outline_servers_from_settings()
