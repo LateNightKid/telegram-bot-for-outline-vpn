@@ -14,8 +14,6 @@ from textwrap import dedent
 
 def make_message_for_new_key(app: str, access_key: str,
                              server_id: ServerId) -> str:
-   #TODO: Add enum class for app.
-
    if app == "outline":
       message_to_send = dedent(
    f"""Ваш ключ:
@@ -25,13 +23,6 @@ def make_message_for_new_key(app: str, access_key: str,
       \nЭтот ключ нужно вставить в приложение <b>Outline Client.</b>
       """)
 
-   elif app == "amnezia":
-      message_to_send = dedent(
-   f"""Ваш ключ:
-      \n<code>{access_key}</code>
-      \nНажмите на него, чтобы скопировать.
-      \nЭтот ключ нужно вставить в приложение <b>Amnezia VPN.</b>
-      """)
    else:
       # TODO
       raise Exception

@@ -2,7 +2,6 @@ import telebot
 from telebot import types
 import telegram.monitoring as monitoring
 import outline.api as outline
-import warp.controller as warp
 from settings import BOT_API_TOKEN, DEFAULT_SERVER_ID, BLOCKED_CHAT_IDS
 from helpers.exceptions import KeyCreationError, KeyRenamingError, InvalidServerIdError
 import telegram.message_formatter as f
@@ -60,10 +59,6 @@ def anwser(message):
         key_name = _form_key_name(message)
         _make_new_key(message, server_id, key_name)
 
-    elif message.text == "Новый ключ Amnezia":
-        key_name = _form_key_name(message)
-        _make_new_key(message, "amnezia", key_name)
-
     elif message.text == "Скачать Outline":
         bot.send_message(message.chat.id,
                          f.make_download_message(),
@@ -86,10 +81,7 @@ def anwser(message):
 def _make_new_key(message, server_id: ServerId, key_name: str):
 
     try:
-        if server_id == "amnezia":
-            key = warp.get_new_key(key_name, server_id)
-        else:
-            key = outline.get_new_key(key_name, server_id)
+        key = outline.get_new_key(key_name, server_id)
 
         _send_key(message, key, server_id)
 
@@ -109,10 +101,7 @@ def _make_new_key(message, server_id: ServerId, key_name: str):
 
 def _send_key(message, key, server_id):
 
-    if server_id == "amnezia":
-        text = f.make_message_for_new_key("amnezia", key.access_url, server_id)
-    else:
-        text = f.make_message_for_new_key("outline", key.access_url, server_id)
+    text = f.make_message_for_new_key("outline", key.access_url, server_id)
 
     bot.send_message(
             message.chat.id,
@@ -134,13 +123,11 @@ def _make_main_menu_markup() -> types.ReplyKeyboardMarkup:
     menu_markup = types.ReplyKeyboardMarkup(resize_keyboard = True)
     
     keygen_server1_button = types.KeyboardButton("Новый ключ Outline")
-    keygen_amnezia_button = types.KeyboardButton("Новый ключ Amnezia")
     download_button = types.KeyboardButton("Скачать Outline")
     help_button = types.KeyboardButton("Помощь")
 
     menu_markup.add(
             keygen_server1_button,
-            keygen_amnezia_button,
             download_button,
             help_button
             )
