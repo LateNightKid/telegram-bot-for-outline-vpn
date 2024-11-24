@@ -1,20 +1,20 @@
 import telebot
 from telebot import types
-import monitoring
-from outline_api_service import get_new_key
-from config import (
+from settings import (
         BOT_API_TOKEN,
         DEFAULT_SERVER_ID,
         BLACKLISTED_CHAT_IDS,
         WHITELISTED_CHAT_IDS,
-        BLACKLIST,
-        WHITELIST
+        ENABLE_BLACKLIST,
+        ENABLE_WHITELIST
         )
-from exceptions import KeyCreationError, KeyRenamingError, InvalidServerIdError
-import message_formatter as f
-from message_formatter import make_message_for_new_key
-from aliases import ServerId
-#import pdb
+import telegram.monitoring as monitoring
+import outline.api as outline
+from settings import BOT_API_TOKEN, DEFAULT_SERVER_ID, BLACKLISTED_CHAT_IDS
+from helpers.exceptions import KeyCreationError, KeyRenamingError, InvalidServerIdError
+import telegram.message_formatter as f
+from helpers.aliases import ServerId
+
 
 assert BOT_API_TOKEN is not None
 bot = telebot.TeleBot(BOT_API_TOKEN, parse_mode='HTML')
@@ -25,12 +25,12 @@ def authorize(func):
 
         chat_id_to_check = message.chat.id
 
-        if BLACKLIST and str(chat_id_to_check) in BLACKLISTED_CHAT_IDS:
+        if ENABLE_BLACKLIST and str(chat_id_to_check) in BLACKLISTED_CHAT_IDS:
             monitoring.report_blacklist_attempt(message.from_user.username,
                                                 chat_id_to_check)
             return
 
-        if WHITELIST and str(chat_id_to_check) not in WHITELISTED_CHAT_IDS:
+        if ENABLE_WHITELIST and str(chat_id_to_check) not in WHITELISTED_CHAT_IDS:
             monitoring.report_not_in_whitelist(message.from_user.username,
                                                 chat_id_to_check)
             return
@@ -49,7 +49,7 @@ def send_status(message):
 @authorize
 def send_welcome(message):
     bot.send_message(message.chat.id,
-    "Привет! Этот бот для создания ключей Outline VPN.",
+    "Hey! This bot is used for creating Outline keys.",
     reply_markup = _make_main_menu_markup())
 
     
@@ -68,18 +68,18 @@ def send_servers_list(message):
 @bot.message_handler(content_types = ['text'])
 @authorize
 def anwser(message):
-    if message.text == "Новый ключ":
+    if message.text == "New Outline Key":
         server_id = DEFAULT_SERVER_ID
         key_name = _form_key_name(message)
         _make_new_key(message, server_id, key_name)
 
-    elif message.text == "Скачать приложение":
+    elif message.text == "Download Outline":
         bot.send_message(message.chat.id,
                          f.make_download_message(),
                          disable_web_page_preview=True
                          )
 
-    elif message.text == "Помощь":
+    elif message.text == "Help":
         bot.send_message(message.chat.id, f.make_help_message())
 
     elif message.text[:7] == "/newkey":
@@ -88,14 +88,15 @@ def anwser(message):
 
     else:
         bot.send_message(message.chat.id,
-                "Команда не распознана.\nИспользуйте /help, чтобы узнать список доступных команд.",
+                "Unknown command.",
                 reply_markup = _make_main_menu_markup())
                 
 
 def _make_new_key(message, server_id: ServerId, key_name: str):
 
     try:
-        key = get_new_key(key_name, server_id)
+        key = outline.get_new_key(key_name, server_id)
+
         _send_key(message, key, server_id)
 
     except KeyCreationError:
@@ -107,19 +108,20 @@ def _make_new_key(message, server_id: ServerId, key_name: str):
         _send_error_message(message, error_message)
 
     except InvalidServerIdError:
-        message_to_send = "Сервер с таким ID отсутствует в списке серверов.\n"\
-        "Введите /servers, чтобы узнать доступные ID"
+        message_to_send = "The server id does not exist."
         bot.send_message(message.chat.id, message_to_send)
 
 
 def _send_key(message, key, server_id):
 
-        bot.send_message(
-                message.chat.id,
-                make_message_for_new_key(key.access_url, server_id)
-                )
-        monitoring.new_key_created(key.kid, key.name, message.chat.id, 
-            server_id)
+    text = f.make_message_for_new_key("outline", key.access_url, server_id)
+
+    bot.send_message(
+            message.chat.id,
+            text
+            )
+    monitoring.new_key_created(key.kid, key.name, message.chat.id, 
+        server_id)
 
 
 def _send_error_message(message, error_message):
@@ -133,9 +135,9 @@ def _send_error_message(message, error_message):
 def _make_main_menu_markup() -> types.ReplyKeyboardMarkup:
     menu_markup = types.ReplyKeyboardMarkup(resize_keyboard = True)
     
-    keygen_server1_button = types.KeyboardButton("Новый ключ")
-    download_button = types.KeyboardButton("Скачать приложение")
-    help_button = types.KeyboardButton("Помощь")
+    keygen_server1_button = types.KeyboardButton("New Outline Key")
+    download_button = types.KeyboardButton("Download Outline")
+    help_button = types.KeyboardButton("Help")
 
     menu_markup.add(
             keygen_server1_button,
@@ -167,5 +169,6 @@ def _form_key_name(message) -> str:
     return key_name
 
 
-monitoring.send_start_message()
-bot.infinity_polling()
+def start_telegram_server():
+    monitoring.send_start_message()
+    bot.infinity_polling()

@@ -1,4 +1,5 @@
 .obsidian/
+devsettings.json
 keeps.txt
 setenv.sh
 # Byte-compiled / optimized / DLL files

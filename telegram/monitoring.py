@@ -1,6 +1,6 @@
 import telebot
-from outline_api_service import check_api_status
-from config import MONITOR_API_TOKEN, ADMIN_CHAT_ID
+from outline.api import check_api_status
+from settings import MONITOR_API_TOKEN, ADMIN_CHAT_ID
 
 assert MONITOR_API_TOKEN is not None
 assert ADMIN_CHAT_ID is not None
@@ -8,7 +8,7 @@ assert ADMIN_CHAT_ID is not None
 monitor = telebot.TeleBot(MONITOR_API_TOKEN)
 
 
-def new_key_created(key_id: int, key_name: str, chat_id: int, server_id: int) -> None:
+def new_key_created(key_id: int, key_name: str, chat_id: int, server_id: str) -> None:
     answer = ("New key created:" + 
             "\nkey_id: "     + str(key_id) + 
             "\nkey_name: "   + str(key_name) + 
