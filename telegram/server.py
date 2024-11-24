@@ -2,7 +2,7 @@ import telebot
 from telebot import types
 import telegram.monitoring as monitoring
 import outline.api as outline
-from settings import BOT_API_TOKEN, DEFAULT_SERVER_ID, BLOCKED_CHAT_IDS
+from settings import BOT_API_TOKEN, DEFAULT_SERVER_ID, BLACKLISTED_CHAT_IDS
 from helpers.exceptions import KeyCreationError, KeyRenamingError, InvalidServerIdError
 import telegram.message_formatter as f
 from helpers.aliases import ServerId
@@ -16,7 +16,7 @@ def check_blacklist(func):
     def wrapper(message):
         chat_id_to_check = message.chat.id
 
-        if str(chat_id_to_check) in BLOCKED_CHAT_IDS:
+        if str(chat_id_to_check) in BLACKLISTED_CHAT_IDS:
             print('here!')
             return
         else:
