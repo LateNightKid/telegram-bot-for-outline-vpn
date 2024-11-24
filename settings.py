@@ -2,7 +2,7 @@ from helpers.classes import OutlineServer
 import json
 
 
-JSON_FILENAME = "devsettings.json"
+JSON_FILENAME = "settings.json"
 
 with open(JSON_FILENAME, 'r') as file:
     settings = json.load(file)
