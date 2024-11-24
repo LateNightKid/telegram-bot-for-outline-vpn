@@ -14,13 +14,15 @@ def get_new_key(key_name: str | None, server_id: ServerId) -> OutlineKey:
 
     api_response = _create_new_key(server_id) 
 
-    key_id = api_response.get('id')
+    key_id = api_response['id']
 
-    access_url = api_response.get('accessUrl')
+    access_url = api_response['accessUrl']
     if key_name == None:
         key_name = "key_id:" + key_id
 
     _rename_key(key_id, key_name, server_id)
+
+    assert key_name is not None
     key = OutlineKey(kid=key_id, name=key_name, access_url=access_url)
 
     return key
