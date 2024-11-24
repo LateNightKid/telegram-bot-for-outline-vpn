@@ -6,7 +6,7 @@ from settings import (
     OUTLINE_IOS_DOWNLOAD_LINK,
     OUTLINE_ANDROID_DOWNLOAD_LINK,
     OUTLINE_ANDROID_APK_DOWNLOAD_LINK,
-    servers_description
+    servers
     )
 from helpers.aliases import ServerId
 from textwrap import dedent
@@ -19,7 +19,7 @@ def make_message_for_new_key(app: str, access_key: str,
    f"""Ваш ключ:
       \n<code>{access_key}</code>
       \nНажмите на него, чтобы скопировать.
-      \nЛокация сервера: <b>{servers_description.get(server_id)}</b>
+      \nЛокация сервера: <b>{servers[server_id].location}</b>
       \nЭтот ключ нужно вставить в приложение <b>Outline Client.</b>
       """)
 
@@ -62,6 +62,6 @@ def make_help_message() -> str:
 def make_servers_list() -> str:
 
     message_to_send = ""
-    for server_id, description in servers_description.items():
-        message_to_send += f'server_id: {server_id}, location: {description}\n'
+    for server_id, server in servers.items():
+        message_to_send += f'server_id: {server_id}, location: {server.location}\n'
     return message_to_send
